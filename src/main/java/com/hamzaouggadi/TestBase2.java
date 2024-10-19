@@ -14,7 +14,8 @@ public class TestBase2 extends Base {
     public void initialize() {
         programRef = OpenGLUtils.initFromFiles("src/main/resources/shaders/Test_2_2.vert", "src/main/resources/shaders/Test_2_2.frag");
 
-        glLineWidth(4);
+        // Doesn't work on Mac M1 chip
+        glLineWidth(1);
 
         int vaoRef = glGenVertexArrays();
         glBindVertexArray(vaoRef);
@@ -28,7 +29,20 @@ public class TestBase2 extends Base {
                 0.4f, -0.6f, 0.0f
         };
 
-        Attribute positionAttribute = new Attribute("vec3", positionData);
+        float[] positionDataQuad = {
+                -0.5f, -0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                0.5f, 0.5f, 0.0f,
+                -0.5f, 0.5f, 0.0f
+        };
+
+        float[] positionDataTriangle = {
+                -0.5f, -0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                0.0f, 0.5f, 0.0f
+        };
+
+        Attribute positionAttribute = new Attribute("vec3", positionDataQuad);
 
         positionAttribute.associateVariable(programRef, "position");
     }
@@ -41,6 +55,6 @@ public class TestBase2 extends Base {
 
         glUseProgram(programRef);
 
-        glDrawArrays(GL_LINE_LOOP, 0, 6);
+        glDrawArrays(GL_LINE_LOOP, 0, 4);
     }
 }
