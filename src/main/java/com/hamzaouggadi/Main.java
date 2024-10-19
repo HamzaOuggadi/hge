@@ -10,7 +10,7 @@ public class Main {
 
         System.out.println("LWJGL version : " + Version.getVersion());
 
-        new TestBase2().run(800, 600);
+        new TestBase4().run(800, 600);
     }
 
 }

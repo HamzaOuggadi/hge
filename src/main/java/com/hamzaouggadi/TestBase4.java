@@ -1,11 +1,12 @@
 package com.hamzaouggadi;
 
+import com.hamzaouggadi.core.Attribute;
 import com.hamzaouggadi.core.Base;
 import com.hamzaouggadi.core.OpenGLUtils;
 
 import static org.lwjgl.opengl.GL40.*;
 
-public class TestBase3 extends Base {
+public class TestBase4 extends Base {
 
     private int programRef;
     private int vaoTri;
@@ -20,8 +21,8 @@ public class TestBase3 extends Base {
     @Override
     public void initialize() {
         programRef = OpenGLUtils.initFromFiles(
-                "src/main/resources/shaders/Test_2_2.vert",
-                "src/main/resources/shaders/Test_2_2.frag");
+                "src/main/resources/shaders/Test_2_3.vert",
+                "src/main/resources/shaders/Test_2_3.frag");
 
         glLineWidth(4);
         glPointSize(5);
@@ -34,19 +35,18 @@ public class TestBase3 extends Base {
                 0.2f, -0.5f, 0.0f,
                 -0.3f, 0.5f, 0.0f
         };
-        int triangleVBO = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, triangleVBO);
-        glBufferData(GL_ARRAY_BUFFER, triangleData, GL_STATIC_DRAW);
+        triangleColorData = new float[] {
+                1.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 1.0f
+        };
 
-        int position = glGetAttribLocation(programRef, "position");
+        Attribute trianglePositionAttr = new Attribute("vec3", triangleData);
+        trianglePositionAttr.associateVariable(programRef, "position");
 
-        if (position == -1) {
-            throw new RuntimeException("Position or Color are equal to -1");
-        }
+        Attribute triangleColorAttr = new Attribute("vec3", triangleColorData);
+        triangleColorAttr.associateVariable(programRef, "vertexColor");
 
-        glVertexAttribPointer(position, 3, GL_FLOAT, false, 0, 0);
-
-        glEnableVertexAttribArray(position);
 
         // Quad
         vaoQuad = glGenVertexArrays();
@@ -57,13 +57,19 @@ public class TestBase3 extends Base {
                 0.7f, 0.5f, 0.0f,
                 -0.2f, 0.5f, 0.0f
         };
-        int quadVBO = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-        glBufferData(GL_ARRAY_BUFFER, quadData, GL_STATIC_DRAW);
+        quadColorData = new float[] {
+                1.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 1.0f,
+                1.0f, 0.0f, 1.0f
+        };
 
-        glVertexAttribPointer(position, 3, GL_FLOAT, false, 0, 0);
+        Attribute quadPositionAttr = new Attribute("vec3", quadData);
+        quadPositionAttr.associateVariable(programRef, "position");
 
-        glEnableVertexAttribArray(position);
+        Attribute quadColorAttr = new Attribute("vec3", quadColorData);
+        quadColorAttr.associateVariable(programRef, "vertexColor");
+
     }
 
     @Override
@@ -79,6 +85,6 @@ public class TestBase3 extends Base {
 
         // Quad
         glBindVertexArray(vaoQuad);
-        glDrawArrays(GL_LINE_LOOP, 0, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 }
