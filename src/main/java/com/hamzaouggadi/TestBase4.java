@@ -70,6 +70,8 @@ public class TestBase4 extends Base {
         Attribute quadColorAttr = new Attribute("vec3", quadColorData);
         quadColorAttr.associateVariable(programRef, "vertexColor");
 
+
+
     }
 
     @Override
@@ -85,6 +87,6 @@ public class TestBase4 extends Base {
 
         // Quad
         glBindVertexArray(vaoQuad);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
 }
