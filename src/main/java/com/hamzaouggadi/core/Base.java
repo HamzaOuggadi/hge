@@ -15,6 +15,12 @@ public abstract class Base {
 
     private boolean running;
 
+    public float time;
+    public float deltaTime;
+
+    private long previousTime;
+    private long currentTime;
+
     public Base() {
 
     };
@@ -43,6 +49,11 @@ public abstract class Base {
         }
 
         running = true;
+
+        time = 0;
+        deltaTime = 1/60f;
+        currentTime = System.currentTimeMillis();
+        previousTime = System.currentTimeMillis();
 
         // Make all OpenGL function calls
         // Apply to this context instance
@@ -78,6 +89,13 @@ public abstract class Base {
         while (running) {
             // Check for user interaction events
             glfwPollEvents();
+
+            // recalculate time variables
+            currentTime = System.currentTimeMillis();
+            deltaTime = (currentTime - previousTime) / 1000f;
+            time += deltaTime;
+            previousTime = currentTime;
+
             // Check if window close icon is clicked
             if (glfwWindowShouldClose(window)) {
                 running = false;
